@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linguagens do Reconhecimento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bege:          #F5F0E8;
+    --bege-escuro:   #E8E0D0;
+    --bege-medio:    #D6CABA;
+    --dourado:       #B8973A;
+    --dourado-claro: #D4AF5A;
+    --dourado-escuro:#8C7028;
+    --preto:         #0E0E0E;
+    --preto-suave:   #1C1C1C;
+    --cinza-escuro:  #3A3A3A;
+    --cinza:         #6A6A6A;
+    --cinza-claro:   #9A9A9A;
+    --branco:        #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Jost', -apple-system, sans-serif;
+    background: var(--bege);
+    color: var(--preto);
+    min-height: 100vh;
+  }
+  .page-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 5rem;
+  }
+
+  /* HEADER */
+  .site-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2.25rem;
+    border-bottom: 1px solid var(--bege-medio);
+  }
+  .site-header .eyebrow {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--dourado);
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  .site-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--preto-suave);
+    margin-bottom: 1rem;
+  }
+  .site-header .divider {
+    width: 36px;
+    height: 1px;
+    background: var(--dourado);
+    margin: 0 auto 1rem;
+  }
+  .site-header .subtitle {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--cinza);
+    letter-spacing: 0.4px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--branco);
+    border: 1px solid var(--bege-escuro);
+    border-radius: 2px;
+    padding: 2.75rem;
+  }
+
+  /* INTRO */
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--preto-suave);
+    margin-bottom: 1rem;
+  }
+  .body-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--cinza-escuro);
+    line-height: 1.85;
+    margin-bottom: 2rem;
+  }
+  .rules {
+    list-style: none;
+    border-top: 1px solid var(--bege-escuro);
+    border-bottom: 1px solid var(--bege-escuro);
+    padding: 1.25rem 0;
+    margin-bottom: 2.5rem;
+  }
+  .rules li {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--cinza-escuro);
+    padding: 0.45rem 0 0.45rem 1.5rem;
+    position: relative;
+    letter-spacing: 0.2px;
+    line-height: 1.6;
+  }
+  .rules li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--dourado);
+  }
+
+  /* BUTTONS */
+  .btn-primary {
+    display: inline-block;
+    background: var(--preto);
+    color: var(--branco);
+    border: 1px solid var(--preto);
+    padding: 14px 36px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s ease;
+  }
+  .btn-primary:hover { background: var(--preto-suave); }
+
+  .btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: var(--dourado-escuro);
+    border: 1px solid var(--dourado);
+    padding: 13px 28px;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 1px;
+    transition: all 0.2s ease;
+  }
+  .btn-outline:hover { background: var(--dourado); color: var(--branco); }
+
+  .btn-ghost {
+    background: none;
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cinza-claro);
+    cursor: pointer;
+    padding: 6px 8px;
+    transition: color 0.15s ease;
+  }
+  .btn-ghost:hover { color: var(--cinza-escuro); }
+  .btn-ghost:disabled { opacity: 0; pointer-events: none; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 2.25rem; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.65rem;
+  }
+  .progress-label {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cinza-claro);
+  }
+  .progress-pct {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--dourado);
+  }
+  .progress-bar {
+    height: 1px;
+    background: var(--bege-escuro);
+    position: relative;
+    overflow: visible;
+  }
+  .progress-fill {
+    height: 1px;
+    background: var(--dourado);
+    transition: width 0.4s ease;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .progress-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--dourado);
+    position: absolute;
+    top: -2px;
+    transform: translateX(-50%);
+    transition: left 0.4s ease;
+  }
+
+  /* QUESTION */
+  .q-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cinza-claro);
+    margin-bottom: 0.5rem;
+  }
+  .q-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cinza-escuro);
+    margin-bottom: 2rem;
+  }
+
+  /* OPTIONS */
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 18px 20px 18px 24px;
+    margin-bottom: 10px;
+    background: var(--branco);
+    border: 1px solid var(--bege-escuro);
+    border-radius: 1px;
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--preto-suave);
+    transition: all 0.18s ease;
+    letter-spacing: 0.1px;
+    position: relative;
+  }
+  .option::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: transparent;
+    transition: background 0.18s ease;
+  }
+  .option:hover { border-color: var(--bege-medio); background: #FDFAF5; }
+  .option:hover::before { background: var(--bege-medio); }
+  .option.selected { border-color: var(--dourado); background: #FEFCF4; }
+  .option.selected::before { background: var(--dourado); }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--bege-escuro);
+  }
+
+  /* RESULT */
+  .result-header {
+    text-align: center;
+    padding-bottom: 2rem;
+    margin-bottom: 0;
+  }
+  .result-eyebrow {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--dourado);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .result-top-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--preto-suave);
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+  .result-divider {
+    width: 30px;
+    height: 1px;
+    background: var(--dourado);
+    margin: 0 auto 2rem;
+  }
+
+  .result-list { margin-bottom: 0; }
+  .result-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--bege-escuro);
+  }
+  .result-item:last-child { border-bottom: none; }
+  .result-item.top-item {
+    padding: 1.4rem 1.5rem;
+    margin: 0 -2.75rem;
+    background: #FEFCF4;
+    border-top: 1px solid rgba(184,151,58,0.25);
+    border-bottom: 1px solid rgba(184,151,58,0.25);
+  }
+  .result-rank {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    width: 22px;
+    text-align: center;
+    color: var(--cinza-claro);
+    flex-shrink: 0;
+  }
+  .top-item .result-rank { color: var(--dourado); font-size: 26px; }
+  .result-body { flex: 1; min-width: 0; }
+  .result-name {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+    color: var(--preto-suave);
+  }
+  .result-desc {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--cinza);
+    letter-spacing: 0.2px;
+  }
+  .bar-track {
+    height: 1px;
+    background: var(--bege-escuro);
+    margin-top: 9px;
+  }
+  .bar-fill {
+    height: 1px;
+    background: var(--bege-medio);
+    transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .top-item .bar-fill { background: var(--dourado-claro); }
+  .result-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--cinza);
+    min-width: 54px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .top-item .result-score { color: var(--dourado-escuro); }
+  .result-score small {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--cinza-claro);
+  }
+
+  /* SUMMARY */
+  .summary-box {
+    margin-top: 2rem;
+    padding: 1.5rem 1.75rem;
+    background: var(--bege);
+    border-left: 2px solid var(--dourado);
+  }
+  .summary-label {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--dourado-escuro);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .summary-body {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--cinza-escuro);
+    line-height: 1.9;
+  }
+
+  /* ACTIONS */
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 2.25rem;
+    flex-wrap: wrap;
+  }
+
+  /* FOOTER */
+  .site-footer {
+    text-align: center;
+    margin-top: 3.5rem;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: var(--cinza-claro);
+  }
+  .site-footer .dot { color: var(--dourado); margin: 0 6px; }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 520px) {
+    .page-wrap { padding: 2.5rem 1rem 4rem; }
+    .card { padding: 1.75rem 1.25rem; }
+    .site-header h1 { font-size: 30px; }
+    .option { font-size: 13px; padding: 15px 16px 15px 20px; }
+    .result-top-name { font-size: 26px; }
+    .result-item.top-item { margin: 0 -1.25rem; padding: 1.25rem 1.25rem; }
+  }
+  @media print {
+    body { background: white; }
+    .card { border: 1px solid #ccc; box-shadow: none; }
+    .nav, .actions, .site-footer { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="site-header">
+    <span class="eyebrow">Ragga · Assessment</span>
+    <h1>Linguagens do<br>Reconhecimento</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Descubra como você prefere ser valorizado no trabalho</p>
+  </header>
+
+  <div id="intro" class="card">
+    <p class="section-title">Como funciona</p>
+    <p class="body-text">Em cada uma das 30 perguntas, escolha a opção que mais te representa no ambiente profissional. Não existe resposta certa ou errada — apenas aquela que ressoa com você.</p>
+    <ul class="rules">
+      <li>Escolha forçada: sem meio-termo, opte pela que mais se parece com você</li>
+      <li>Não existe resposta certa ou errada</li>
+      <li>Leva cerca de 5 minutos</li>
+      <li>Ao final, você recebe um ranking das 4 linguagens</li>
+    </ul>
+    <button class="btn-primary" id="start-btn">Iniciar</button>
+  </div>
+
+  <div id="test" class="card hidden">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="progress-label">Progresso</span>
+        <span class="progress-pct" id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+        <div id="progress-dot"  class="progress-dot"  style="left:0%"></div>
+      </div>
+    </div>
+    <div id="q-number" class="q-number">Pergunta 1 de 30</div>
+    <div class="q-title">Qual opção mais te representa?</div>
+    <div id="options"></div>
+    <div class="nav">
+      <button id="back-btn"     class="btn-ghost" disabled>← Voltar</button>
+      <button id="restart-mid"  class="btn-ghost">Recomeçar</button>
+    </div>
+  </div>
+
+  <div id="result" class="card hidden">
+    <div class="result-header">
+      <span class="result-eyebrow">Sua linguagem principal</span>
+      <p class="result-top-name" id="result-top-name">—</p>
+      <div class="result-divider"></div>
+    </div>
+    <div id="result-list" class="result-list"></div>
+    <div class="summary-box">
+      <span class="summary-label">O que isso significa para você</span>
+      <p class="summary-body" id="result-summary"></p>
+    </div>
+    <div class="actions">
+      <button class="btn-primary" id="restart-btn">Refazer o teste</button>
+      <button class="btn-outline" id="print-btn">Imprimir resultado</button>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    Baseado nas linguagens do amor de Gary Chapman
+    <span class="dot">·</span>
+    Adaptado para o ambiente corporativo
+  </footer>
+
+</div>
+<script>
+/*
+  Pares propositalmente contrastantes:
+  R = Reconhecimento verbal  (palavras, elogios, feedback positivo)
+  P = Presença e escuta      (tempo, atenção plena, 1:1)
+  G = Gestos de reconhecimento (presentes, brindes, lembranças)
+  C = Apoio e colaboração    (ajuda prática, dividir carga)
+
+  Cada par coloca duas linguagens bem distintas frente a frente.
+  Cada combinação (R×P, R×G, R×C, P×G, P×C, G×C) aparece 5 vezes = 30 perguntas.
+  Balanceamento: cada linguagem aparece exatamente 15 vezes.
+*/
+const questions = [
+
+  /* ── R vs P (5 pares) ── */
+  {
+    a: "Meu gestor me elogia publicamente na reunião de resultados — na frente de toda a equipe.",
+    ka: "R",
+    b: "Meu gestor cancela a agenda do dia para me ouvir por uma hora, sem pressa e sem celular.",
+    kb: "P"
+  },
+  {
+    a: "Recebo um e-mail do diretor reconhecendo meu trabalho para toda a área.",
+    ka: "R",
+    b: "Sou convidado para um café de 1:1 só para conversar sobre como estou me sentindo.",
+    kb: "P"
+  },
+  {
+    a: "Meu líder diz 'você foi essencial para esse resultado' diante dos outros membros do time.",
+    ka: "R",
+    b: "Meu líder desliga as notificações e dedica 45 minutos para planejar minha carreira comigo.",
+    kb: "P"
+  },
+  {
+    a: "Recebo feedback escrito detalhado elogiando minha entrega — guardado para reler quando precisar.",
+    ka: "R",
+    b: "Tenho uma mentoria regular onde o mentor está de fato presente, fazendo perguntas profundas.",
+    kb: "P"
+  },
+  {
+    a: "Sou mencionado pelo nome na apresentação de resultados como responsável pelo sucesso do projeto.",
+    ka: "R",
+    b: "Meu líder reserva toda sexta-feira para ser encontrado — disponível só para mim naquele momento.",
+    kb: "P"
+  },
+
+  /* ── R vs G (5 pares) ── */
+  {
+    a: "Ouvir 'obrigado, você salvou o projeto' dito com emoção pelo meu líder, em privado.",
+    ka: "R",
+    b: "Encontrar uma caixinha com um presente personalizado na minha mesa sem avisos.",
+    kb: "G"
+  },
+  {
+    a: "Ser elogiado em um all-hands com 200 pessoas assistindo.",
+    ka: "R",
+    b: "Ganhar um vale para um jantar em um restaurante especial como reconhecimento de fim de ano.",
+    kb: "G"
+  },
+  {
+    a: "Receber uma mensagem de voz do meu diretor dizendo o quanto meu trabalho importa.",
+    ka: "R",
+    b: "Receber um livro com um bilhete manuscrito do meu gestor explicando por que pensou em mim.",
+    kb: "G"
+  },
+  {
+    a: "Ser apresentado para um cliente importante como 'a pessoa que fez isso acontecer'.",
+    ka: "R",
+    b: "Ganhar uma experiência (show, viagem, curso) escolhida com base no meu perfil pessoal.",
+    kb: "G"
+  },
+  {
+    a: "Meu líder me ligar só para dizer que está orgulhoso do meu crescimento este ano.",
+    ka: "R",
+    b: "Receber um brinde exclusivo da empresa, edição limitada, que poucos recebem.",
+    kb: "G"
+  },
+
+  /* ── R vs C (5 pares) ── */
+  {
+    a: "Ser reconhecido como o melhor do time pelo meu gestor em uma reunião de liderança.",
+    ka: "R",
+    b: "Meu time inteiro parar o que está fazendo para me ajudar a entregar um prazo apertado.",
+    kb: "C"
+  },
+  {
+    a: "Receber um elogio genuíno e específico sobre minha forma de trabalhar.",
+    ka: "R",
+    b: "Um colega sênior oferecer espontaneamente para revisar e melhorar meu trabalho.",
+    kb: "C"
+  },
+  {
+    a: "Meu líder me dizer que fui o profissional que mais cresceu no time esse semestre.",
+    ka: "R",
+    b: "Meu líder tirar tarefas da minha lista quando percebe que estou sobrecarregado.",
+    kb: "C"
+  },
+  {
+    a: "Ser destacado no boletim interno como referência de qualidade para os outros aprenderem.",
+    ka: "R",
+    b: "Um colega me ligar às 22h para me ajudar a resolver um problema crítico.",
+    kb: "C"
+  },
+  {
+    a: "Ouvir 'você é a pessoa mais comprometida que já trabalhei' do meu diretor.",
+    ka: "R",
+    b: "Meu gestor assumir uma tarefa minha sem eu pedir, só porque percebeu que eu precisava.",
+    kb: "C"
+  },
+
+  /* ── P vs G (5 pares) ── */
+  {
+    a: "Ter um almoço longo com meu gestor, sem pauta, só para nos conhecermos melhor.",
+    ka: "P",
+    b: "Ganhar um kit premium com produtos que combinam com meu estilo de vida.",
+    kb: "G"
+  },
+  {
+    a: "Meu líder bloquear duas horas na agenda para me ajudar a pensar no meu próximo passo de carreira.",
+    ka: "P",
+    b: "Ser surpreendido com ingressos para um evento que eu sempre quis ir.",
+    kb: "G"
+  },
+  {
+    a: "Ter uma conversa franca com meu gestor onde ele compartilha algo pessoal e me escuta de verdade.",
+    ka: "P",
+    b: "Receber um presente físico que chegou pelo correio na minha casa, pensado especialmente para mim.",
+    kb: "G"
+  },
+  {
+    a: "Meu líder perguntar como estou — e realmente esperar a resposta, sem olhar o celular.",
+    ka: "P",
+    b: "Ganhar um objeto de decoração para meu home office como reconhecimento pelo projeto entregue.",
+    kb: "G"
+  },
+  {
+    a: "Ser convidado para uma caminhada com meu gestor como forma de termos uma conversa sem pressão.",
+    ka: "P",
+    b: "Receber um cartão físico escrito à mão com o motivo pelo qual sou especial para o time.",
+    kb: "G"
+  },
+
+  /* ── P vs C (5 pares) ── */
+  {
+    a: "Meu gestor reservar um horário fixo semanal exclusivo para mim, sem poder ser cancelado.",
+    ka: "P",
+    b: "Meu time organizar um mutirão para me ajudar a zerar minha fila de pendências.",
+    kb: "C"
+  },
+  {
+    a: "Ter um colega que para tudo para me escutar quando estou travado em um problema.",
+    ka: "P",
+    b: "Ter um colega que assume parte do meu trabalho quando percebe que estou no limite.",
+    kb: "C"
+  },
+  {
+    a: "Meu gestor me visitar presencialmente só para conversar — sem reunião marcada.",
+    ka: "P",
+    b: "Meu gestor contratar alguém temporariamente para aliviar minha carga de trabalho.",
+    kb: "C"
+  },
+  {
+    a: "Ter um encontro de feedback tão bom que saio energizado e com clareza sobre meu futuro.",
+    ka: "P",
+    b: "Um colega refazer do zero uma entrega minha que estava com problemas, sem julgamento.",
+    kb: "C"
+  },
+  {
+    a: "Meu líder me ligar apenas para perguntar 'como você está?' — sem nenhuma outra pauta.",
+    ka: "P",
+    b: "Meu líder reorganizar as prioridades do time para que eu possa focar no que mais importa.",
+    kb: "C"
+  },
+
+  /* ── G vs C (5 pares) ── */
+  {
+    a: "Ganhar uma viagem de incentivo como prêmio pelo melhor desempenho do trimestre.",
+    ka: "G",
+    b: "O time inteiro pedir para trabalhar no meu projeto, porque acredita no que estou fazendo.",
+    kb: "C"
+  },
+  {
+    a: "Receber uma placa de homenagem personalizada pelos anos de contribuição.",
+    ka: "G",
+    b: "Um colega sênior me oferecer tutoria prática toda semana, de graça, porque quer me ver crescer.",
+    kb: "C"
+  },
+  {
+    a: "Ganhar um item de alto valor (eletrônico, acessório) como surpresa por um resultado excepcional.",
+    ka: "G",
+    b: "Meu time reorganizar o próprio trabalho para que eu possa sair mais cedo e descansar.",
+    kb: "C"
+  },
+  {
+    a: "Receber um presente que mostra que a empresa conhece meus hobbies e interesses pessoais.",
+    ka: "G",
+    b: "Um colega dedicar horas do próprio tempo para me ensinar algo que travava meu crescimento.",
+    kb: "C"
+  },
+  {
+    a: "Ser contemplado com um upgrade — categoria de hotel, classe no avião — em uma viagem corporativa.",
+    ka: "G",
+    b: "Meu gestor blindar minha agenda de reuniões desnecessárias para que eu possa produzir.",
+    kb: "C"
+  }
+];
+
+const labels = {
+  R: { name: "Reconhecimento verbal",    desc: "palavras que valorizam seu trabalho" },
+  P: { name: "Presença e escuta",         desc: "tempo dedicado e atenção plena" },
+  G: { name: "Gestos de reconhecimento",  desc: "lembranças, brindes e experiências" },
+  C: { name: "Apoio e colaboração",       desc: "ajuda prática e suporte concreto" }
+};
+
+const descriptions = {
+  R: "Palavras têm peso para você. Um elogio sincero, um reconhecimento público ou um 'você foi essencial' dito com intenção carrega mais valor do que qualquer presente material. Você se sente verdadeiramente visto quando seu trabalho é nomeado e celebrado em voz alta. Dica para seu líder: seja específico nos elogios — mencione o que você fez, não apenas o resultado geral.",
+  P: "Tempo é a moeda mais valiosa para você. Quando alguém para tudo, desliga as notificações e te dá atenção completa, você se sente profundamente reconhecido. Reuniões 1:1 bem feitas, conversas sem pressa e presença de verdade valem mais do que qualquer benefício. Dica para seu líder: proteja os momentos de encontro com você — não cancele, não adie, não divida.",
+  G: "Você percebe cuidado através de gestos concretos e objetos que alguém escolheu pensando em você. Não é sobre preço — é sobre a intenção por trás. Um presente que reflete sua personalidade ou uma experiência alinhada aos seus gostos diz 'eu te vejo como pessoa, não só como profissional'. Dica para seu líder: personalize. Um presente genérico não funciona — um específico fica para sempre.",
+  C: "Para você, a maior prova de reconhecimento é quando alguém coloca a mão na massa ao seu lado. Ajuda prática, dividir carga, aparecer quando é difícil — essas ações falam mais alto que qualquer discurso. Você confia em quem age, não em quem promete. Dica para seu líder: pergunte 'posso tirar algo da sua lista hoje?' em vez de só perguntar como você está."
+};
+
+let current = 0;
+let answers = new Array(30).fill(null);
+
+const introEl    = document.getElementById('intro');
+const testEl     = document.getElementById('test');
+const resultEl   = document.getElementById('result');
+const qNumber    = document.getElementById('q-number');
+const optionsDiv = document.getElementById('options');
+const pFill      = document.getElementById('progress-fill');
+const pDot       = document.getElementById('progress-dot');
+const pPct       = document.getElementById('progress-pct');
+const backBtn    = document.getElementById('back-btn');
+
+function renderQuestion() {
+  const q   = questions[current];
+  const pct = Math.round((current / 30) * 100);
+  qNumber.textContent  = 'Pergunta ' + (current + 1) + ' de 30';
+  pFill.style.width    = pct + '%';
+  pDot.style.left      = pct + '%';
+  pPct.textContent     = pct + '%';
+  backBtn.disabled     = current === 0;
+
+  optionsDiv.innerHTML = '';
+  [[q.a, q.ka], [q.b, q.kb]].forEach(([text, cat]) => {
+    const btn = document.createElement('button');
+    btn.className = 'option' + (answers[current] === cat ? ' selected' : '');
+    btn.textContent = text;
+    btn.onclick = () => {
+      answers[current] = cat;
+      optionsDiv.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      setTimeout(() => {
+        if (current < 29) {
+          current++;
+          renderQuestion();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          showResult();
+        }
+      }, 240);
+    };
+    optionsDiv.appendChild(btn);
+  });
+}
+
+function showResult() {
+  const scores = { R: 0, P: 0, G: 0, C: 0 };
+  answers.forEach(a => { if (a) scores[a]++; });
+  const sorted = Object.entries(scores).sort((x, y) => y[1] - x[1]);
+
+  testEl.classList.add('hidden');
+  resultEl.classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const topKey = sorted[0][0];
+  document.getElementById('result-top-name').textContent = labels[topKey].name;
+
+  const list = document.getElementById('result-list');
+  list.innerHTML = '';
+  sorted.forEach(([key, score], i) => {
+    const lb  = labels[key];
+    const pct = Math.round((score / 15) * 100);
+    const div = document.createElement('div');
+    div.className = 'result-item' + (i === 0 ? ' top-item' : '');
+    div.innerHTML =
+      '<div class="result-rank">'  + (i + 1) + '</div>' +
+      '<div class="result-body">'  +
+        '<div class="result-name">' + lb.name + '</div>'  +
+        '<div class="result-desc">' + lb.desc + '</div>'  +
+        '<div class="bar-track"><div class="bar-fill" style="width:0%" data-pct="' + pct + '"></div></div>' +
+      '</div>' +
+      '<div class="result-score">' + score + '<small> /15</small></div>';
+    list.appendChild(div);
+  });
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(el => {
+        el.style.width = el.dataset.pct + '%';
+      });
+    }, 80);
+  });
+
+  document.getElementById('result-summary').textContent = descriptions[topKey];
+}
+
+function reset() {
+  current = 0;
+  answers = new Array(30).fill(null);
+  resultEl.classList.add('hidden');
+  testEl.classList.add('hidden');
+  introEl.classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('start-btn').onclick  = () => {
+  introEl.classList.add('hidden');
+  testEl.classList.remove('hidden');
+  renderQuestion();
+};
+backBtn.onclick                                = () => { if (current > 0) { current--; renderQuestion(); } };
+document.getElementById('restart-mid').onclick = reset;
+document.getElementById('restart-btn').onclick = reset;
+document.getElementById('print-btn').onclick   = () => window.print();
+</script>
+</body>
+</html>
