@@ -321,6 +321,10 @@
     border-top: 1px solid rgba(184,151,58,0.25);
     border-bottom: 1px solid rgba(184,151,58,0.25);
   }
+  /* crescente: o primeiro item é o menos importante */
+  .result-item.bottom-item {
+    opacity: 0.55;
+  }
   .result-rank {
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
@@ -423,7 +427,7 @@
     .site-header h1 { font-size: 30px; }
     .option { font-size: 13px; padding: 15px 16px 15px 20px; }
     .result-top-name { font-size: 26px; }
-    .result-item.top-item { margin: 0 -1.25rem; padding: 1.25rem 1.25rem; }
+    .result-item.top-item { margin: 0 -1.25rem; padding: 1.25rem; }
   }
   @media print {
     body { background: white; }
@@ -436,7 +440,7 @@
 <div class="page-wrap">
 
   <header class="site-header">
-    <span class="eyebrow">Ragga · Assessment</span>
+    <span class="eyebrow">Instituto Paloma Torres · Assessment</span>
     <h1>Linguagens do<br>Reconhecimento</h1>
     <div class="divider"></div>
     <p class="subtitle">Descubra como você prefere ser valorizado no trabalho</p>
@@ -476,13 +480,13 @@
 
   <div id="result" class="card hidden">
     <div class="result-header">
-      <span class="result-eyebrow">Sua linguagem principal</span>
+      <span class="result-eyebrow">Do que menos ao que mais te move</span>
       <p class="result-top-name" id="result-top-name">—</p>
       <div class="result-divider"></div>
     </div>
     <div id="result-list" class="result-list"></div>
     <div class="summary-box">
-      <span class="summary-label">O que isso significa para você</span>
+      <span class="summary-label">Sua linguagem principal</span>
       <p class="summary-body" id="result-summary"></p>
     </div>
     <div class="actions">
@@ -492,9 +496,9 @@
   </div>
 
   <footer class="site-footer">
-    Baseado nas linguagens do amor de Gary Chapman
+    Instituto Paloma Torres
     <span class="dot">·</span>
-    Adaptado para o ambiente corporativo
+    Adaptação corporativa das linguagens do amor de Gary Chapman
   </footer>
 
 </div>
@@ -767,27 +771,35 @@ function renderQuestion() {
 function showResult() {
   const scores = { R: 0, P: 0, G: 0, C: 0 };
   answers.forEach(a => { if (a) scores[a]++; });
-  const sorted = Object.entries(scores).sort((x, y) => y[1] - x[1]);
+
+  // Ordena crescente: menor pontuação primeiro, maior por último
+  const sorted = Object.entries(scores).sort((x, y) => x[1] - y[1]);
 
   testEl.classList.add('hidden');
   resultEl.classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const topKey = sorted[0][0];
+  // Linguagem principal = última da lista (maior pontuação)
+  const topKey = sorted[sorted.length - 1][0];
   document.getElementById('result-top-name').textContent = labels[topKey].name;
 
   const list = document.getElementById('result-list');
   list.innerHTML = '';
+
+  const posLabels = ['Menos essencial', 'Secundária', 'Importante', 'Principal'];
+
   sorted.forEach(([key, score], i) => {
-    const lb  = labels[key];
-    const pct = Math.round((score / 15) * 100);
-    const div = document.createElement('div');
-    div.className = 'result-item' + (i === 0 ? ' top-item' : '');
+    const lb    = labels[key];
+    const pct   = Math.round((score / 15) * 100);
+    const isTop = i === sorted.length - 1;
+    const isBot = i === 0;
+    const div   = document.createElement('div');
+    div.className = 'result-item' + (isTop ? ' top-item' : '') + (isBot ? ' bottom-item' : '');
     div.innerHTML =
-      '<div class="result-rank">'  + (i + 1) + '</div>' +
-      '<div class="result-body">'  +
-        '<div class="result-name">' + lb.name + '</div>'  +
-        '<div class="result-desc">' + lb.desc + '</div>'  +
+      '<div class="result-rank">' + (i + 1) + '</div>' +
+      '<div class="result-body">' +
+        '<div class="result-name">' + lb.name + '</div>' +
+        '<div class="result-desc">' + posLabels[i] + ' · ' + lb.desc + '</div>' +
         '<div class="bar-track"><div class="bar-fill" style="width:0%" data-pct="' + pct + '"></div></div>' +
       '</div>' +
       '<div class="result-score">' + score + '<small> /15</small></div>';
